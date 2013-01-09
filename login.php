@@ -1,13 +1,30 @@
 <?php
 session_start(); 
+// ***************************************************** //
+// *****  Set your Username & Password & URL ********** //
+	$username = "username";
+	$password = "password";
+	$passwordprotectedfile = "http://yourdomain.com/passwordprotected.php";
+// ************************************************** //
 ?>
 <html>
 <head>
+<!--[if lte IE 9]>
+	<style>
+		.ie{
+			display:block!important;
+		}
+		label, #username{
+			margin-top:1em;
+		}
+	</style>
+<![endif]-->
+
 <style>
 
  body {
     background: #eeeeee;
-    }
+}
 
 form{
 	margin:0;
@@ -76,9 +93,9 @@ input{
 	margin-top:1em;
 }
 
-.placeholder
+.ie
 {
-  color: #aaa;
+  display: none;
 }
 
 input[type=search] {	-webkit-appearance: none;}
@@ -93,11 +110,6 @@ input[type="search"]::-webkit-search-cancel-button {
 </head>
 <body>
 <?php
-// ***************************************************** //
-// ********	 Set your username and password  ********** //
-	$username = "username";
-	$password = "password";
-// ************************************************** //
 
 if(isset($_GET['logout'])) {
 	unset($_SESSION['user']);
@@ -113,7 +125,8 @@ if(isset($_POST['username']) && isset($_POST['password'])) {
 	} else {
 		show_login('<p class="alert">Wrong Username / Password!</p>');
 	}
-
+} elseif(isset($_SESSION['user'])) {
+		 header( 'Location:'.$passwordprotectedfile ) ;
 } else {
 	show_login("&nbsp;");
 }
@@ -126,11 +139,11 @@ echo <<<_END
 
 	<form action="$self" method="post">
 
-	<!-- <label for="username">Users Name</label> -->
+	<label for="username" class="ie">Username</label> 
 
 	<input type="text" name="username" id="username" placeholder="Username">
 
-	<!-- <label for="password">Password</label> -->
+	<label for="password" class="ie">Password</label> 
 
 	<input type="password" name="password" id="password" placeholder="Password">
 _END;
